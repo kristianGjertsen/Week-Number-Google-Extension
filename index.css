@@ -1,0 +1,94 @@
+:root {
+    --card: #ffffff;
+    --text: #1f1a17;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    width: 320px;
+    height: 230px;
+    font-family: "Trebuchet MS", "Segoe UI", Tahoma, sans-serif;
+}
+
+body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.card {
+    background: whitesmoke;
+    border-radius: 18px;
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.18);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    width: 100%;
+    height: 100%;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+h2 {
+    margin: 0;
+    color: var(--text);
+    font-size: 16px;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+}
+
+h3 {
+    margin: 0 0 6px;
+    font-size: 11px;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    color: #4b4b4b;
+}
+
+.picker-row {
+    display: flex;
+    gap: 12px;
+}
+
+.picker {
+    flex: 1;
+}
+
+input[type="color"] {
+    width: 100%;
+    height: 32px;
+    padding: 0;
+    border: none;
+    background: transparent;
+}
+
+.preset-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+}
+
+.preset {
+    height: 32px;
+    border-radius: 8px;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    background: var(--bg);
+    color: var(--text);
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+}
+
+.preset:focus-visible {
+    outline: 2px solid rgba(0, 0, 0, 0.6);
+    outline-offset: 1px;
+}

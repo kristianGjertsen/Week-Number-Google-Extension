@@ -1,0 +1,20 @@
+{
+    "manifest_version": 3,
+    "name": "Ukenummer",
+    "description": "Viser dagens ukenummer (ISO-8601).",
+    "version": "1.0",
+    "action": {
+        "default_popup": "popup.html"
+    },
+    "icons": {
+        "128": "icon.png"
+    },
+    "background": {
+        "service_worker": "background.js",
+        "type": "module"
+    },
+    "permissions": [
+        "storage",
+        "tabs"
+    ]
+}
