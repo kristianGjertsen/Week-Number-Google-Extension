@@ -51,6 +51,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     updatePresetLabels(presets);
 
+    bgInput?.addEventListener("input", saveAndUpdate);
+    textInput?.addEventListener("input", saveAndUpdate);
     bgInput?.addEventListener("change", saveAndUpdate);
     textInput?.addEventListener("change", saveAndUpdate);
 
