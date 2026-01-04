@@ -4,18 +4,19 @@ const triggerUpdate = () => {
     updateIcon();
 };
 
-chrome.runtime.onInstalled.addListener(triggerUpdate);
-chrome.runtime.onStartup.addListener(triggerUpdate);
+chrome.runtime.onInstalled.addListener(updateIcon);
+chrome.runtime.onStartup.addListener(updateIcon);
+
 chrome.windows.onFocusChanged.addListener((windowId) => {
-    if (windowId !== chrome.windows.WINDOW_ID_NONE) triggerUpdate();
-});
-chrome.tabs.onActivated.addListener(triggerUpdate);
-chrome.tabs.onUpdated.addListener((_, info) => {
-    if (info.status === "complete") triggerUpdate();
+    if (windowId !== chrome.windows.WINDOW_ID_NONE) {
+        updateIcon();
+    }
 });
 
-chrome.runtime.onMessage.addListener((message) => {
-    if (message?.type === "updateIcon") triggerUpdate();
+chrome.runtime.onMessage.addListener((msg) => {
+    if (msg?.type === "updateIcon") {
+        updateIcon();
+    }
 });
 
 triggerUpdate();

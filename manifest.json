@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
-    "name": "Ukenummer",
-    "description": "Viser dagens ukenummer (ISO-8601).",
+    "name": "Week Number - Dynamic Icon",
+    "description": "Shows the current week number in the extension icon, with customizable colors.",
     "version": "1.0",
     "action": {
         "default_popup": "popup.html"
@@ -14,7 +14,6 @@
         "type": "module"
     },
     "permissions": [
-        "storage",
-        "tabs"
+        "storage"
     ]
 }
