@@ -1,7 +1,11 @@
+// Importert direkte — popup trenger ikke sende melding til service workeren.
+// Dette fikser "Could not establish connection" på Windows der service workeren
+// ofte er terminert når popup åpnes.
+import { updateIcon } from "./icon-utils.js";
+
 function getDefaultColors() {
     const bgInput = document.getElementById("bgColorPicker");
     const textInput = document.getElementById("textColorPicker");
-
     return {
         bgColor: bgInput?.value || "#ffffff",
         textColor: textInput?.value || "#000000",
@@ -11,17 +15,14 @@ function getDefaultColors() {
 function applyColors({ bgColor, textColor }) {
     const bgInput = document.getElementById("bgColorPicker");
     const textInput = document.getElementById("textColorPicker");
-
     if (bgInput) bgInput.value = bgColor;
     if (textInput) textInput.value = textColor;
 }
 
-function saveAndUpdate() {
+async function saveAndUpdate() {
     const { bgColor, textColor } = getDefaultColors();
-
-    chrome.storage.sync.set({ bgColor, textColor }, () => {
-        chrome.runtime.sendMessage({ type: "updateIcon" });
-    });
+    await new Promise((resolve) => chrome.storage.sync.set({ bgColor, textColor }, resolve));
+    await updateIcon();
 }
 
 function getIsoWeekNumber(date) {
@@ -34,10 +35,7 @@ function getIsoWeekNumber(date) {
 
 function updatePresetLabels(presets) {
     const week = getIsoWeekNumber(new Date());
-    const label = String(week);
-    presets.forEach((button) => {
-        button.textContent = label;
-    });
+    presets.forEach((button) => { button.textContent = String(week); });
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -61,12 +59,10 @@ document.addEventListener("DOMContentLoaded", () => {
             const styles = getComputedStyle(button);
             const bgColor = styles.getPropertyValue("--bg").trim();
             const textColor = styles.getPropertyValue("--text").trim();
-
             applyColors({
                 bgColor: bgColor || getDefaultColors().bgColor,
                 textColor: textColor || getDefaultColors().textColor,
             });
-
             saveAndUpdate();
         });
     });
