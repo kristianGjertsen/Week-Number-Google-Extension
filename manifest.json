@@ -2,7 +2,7 @@
     "manifest_version": 3,
     "name": "Week Number - Dynamic Icon",
     "description": "Shows the current week number in the extension icon, with customizable colors.",
-    "version": "1.2",
+    "version": "1.3",
     "action": {
         "default_popup": "popup.html"
     },
@@ -15,7 +15,6 @@
     },
     "permissions": [
         "storage",
-        "windows",
         "alarms"
     ]
 }
