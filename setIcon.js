@@ -1,14 +1,21 @@
-// Importert direkte — popup trenger ikke sende melding til service workeren.
-// Dette fikser "Could not establish connection" på Windows der service workeren
-// ofte er terminert når popup åpnes.
-import { updateIcon } from "./icon-utils.js";
+import { updateIcon, drawWeekIcon } from "./icon-utils.js";
 
-function getDefaultColors() {
+const DEFAULTS = {
+    bgColor: "#3a86ff",
+    textColor: "#ffffff",
+    style: "calendar",
+};
+
+const SAVE_DEBOUNCE_MS = 600; // keep storage.sync under 120 writes/min
+let saveTimeoutId = null;
+
+function getDefaults() {
     const bgInput = document.getElementById("bgColorPicker");
     const textInput = document.getElementById("textColorPicker");
     return {
-        bgColor: bgInput?.value || "#ffffff",
-        textColor: textInput?.value || "#000000",
+        bgColor: bgInput?.value || DEFAULTS.bgColor,
+        textColor: textInput?.value || DEFAULTS.textColor,
+        style: DEFAULTS.style,
     };
 }
 
@@ -19,10 +26,30 @@ function applyColors({ bgColor, textColor }) {
     if (textInput) textInput.value = textColor;
 }
 
-async function saveAndUpdate() {
-    const { bgColor, textColor } = getDefaultColors();
-    await new Promise((resolve) => chrome.storage.sync.set({ bgColor, textColor }, resolve));
-    await updateIcon();
+function applyStyle(style) {
+    const buttons = document.querySelectorAll("[data-style]");
+    buttons.forEach((btn) => {
+        btn.classList.toggle("active", btn.dataset.style === style);
+    });
+}
+
+function scheduleSaveColorsAndUpdate(immediate = false) {
+    const performSave = async () => {
+        const { bgColor, textColor } = getDefaults();
+        await new Promise((resolve) => chrome.storage.sync.set({ bgColor, textColor }, resolve));
+        renderStylePreviews();
+        await updateIcon();
+    };
+
+    if (immediate) {
+        clearTimeout(saveTimeoutId);
+        saveTimeoutId = null;
+        performSave();
+        return;
+    }
+
+    clearTimeout(saveTimeoutId);
+    saveTimeoutId = setTimeout(performSave, SAVE_DEBOUNCE_MS);
 }
 
 function getIsoWeekNumber(date) {
@@ -38,21 +65,36 @@ function updatePresetLabels(presets) {
     presets.forEach((button) => { button.textContent = String(week); });
 }
 
+function renderStylePreviews() {
+    const previewCanvases = document.querySelectorAll("[data-style] canvas");
+    const { bgColor, textColor } = getDefaults();
+    const week = getIsoWeekNumber(new Date());
+    previewCanvases.forEach((canvas) => {
+        const style = canvas.parentElement?.dataset.style || "calendar";
+        const size = canvas.width || 32;
+        const ctx = canvas.getContext("2d");
+        drawWeekIcon(ctx, size, bgColor, textColor, week, style);
+    });
+}
+
 document.addEventListener("DOMContentLoaded", () => {
     const bgInput = document.getElementById("bgColorPicker");
     const textInput = document.getElementById("textColorPicker");
     const presets = document.querySelectorAll(".preset");
+    const styleButtons = document.querySelectorAll("[data-style]");
 
-    chrome.storage.sync.get(getDefaultColors(), (values) => {
+    chrome.storage.sync.get(DEFAULTS, (values) => {
         applyColors(values);
+        applyStyle(values.style);
+        renderStylePreviews();
     });
 
     updatePresetLabels(presets);
 
-    bgInput?.addEventListener("input", saveAndUpdate);
-    textInput?.addEventListener("input", saveAndUpdate);
-    bgInput?.addEventListener("change", saveAndUpdate);
-    textInput?.addEventListener("change", saveAndUpdate);
+    bgInput?.addEventListener("input", () => scheduleSaveColorsAndUpdate(false));
+    textInput?.addEventListener("input", () => scheduleSaveColorsAndUpdate(false));
+    bgInput?.addEventListener("change", () => scheduleSaveColorsAndUpdate(true));
+    textInput?.addEventListener("change", () => scheduleSaveColorsAndUpdate(true));
 
     presets.forEach((button) => {
         button.addEventListener("click", () => {
@@ -60,10 +102,20 @@ document.addEventListener("DOMContentLoaded", () => {
             const bgColor = styles.getPropertyValue("--bg").trim();
             const textColor = styles.getPropertyValue("--text").trim();
             applyColors({
-                bgColor: bgColor || getDefaultColors().bgColor,
-                textColor: textColor || getDefaultColors().textColor,
+                bgColor: bgColor || getDefaults().bgColor,
+                textColor: textColor || getDefaults().textColor,
             });
-            saveAndUpdate();
+            scheduleSaveColorsAndUpdate(true);
+        });
+    });
+
+    styleButtons.forEach((button) => {
+        button.addEventListener("click", async () => {
+            const style = button.dataset.style || "calendar";
+            applyStyle(style);
+            await new Promise((resolve) => chrome.storage.sync.set({ style }, resolve));
+            renderStylePreviews();
+            await updateIcon();
         });
     });
 });

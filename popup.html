@@ -8,15 +8,28 @@
 </head>
 <body>
     <div class="card">
-        <h2>Color Style</h2>
+        <div class="title-row">
+            <h2>Color Style</h2>
+            <div class="style-inline">
+                <button class="style-option" type="button" data-style="calendar" aria-label="Calendar">
+                    <canvas width="32" height="32"></canvas>
+                </button>
+                <button class="style-option" type="button" data-style="rounded" aria-label="Rounded">
+                    <canvas width="32" height="32"></canvas>
+                </button>
+                <button class="style-option" type="button" data-style="plain" aria-label="Plain">
+                    <canvas width="32" height="32"></canvas>
+                </button>
+            </div>
+        </div>
         <div class="picker-row">
             <div class="background_picker picker">
                 <h3>Background</h3>
-                <input type="color" id="bgColorPicker" name="bgColorPicker" value="#ffffff">
+                <input type="color" id="bgColorPicker" name="bgColorPicker" value="#3a86ff">
             </div>
             <div class="week_picler picker">
                 <h3>Text</h3>
-                <input type="color" id="textColorPicker" name="textColorPicker" value="#000000">
+                <input type="color" id="textColorPicker" name="textColorPicker" value="#ffffff">
             </div>
         </div>
         <div class="preset-grid">
@@ -41,6 +54,7 @@
             <button class="preset" type="button" style="--bg:#F1FA8C; --text:#1B1B1B" title="#F1FA8C / #1B1B1B">X</button>
             <button class="preset" type="button" style="--bg:#22223B; --text:#F2E9E4" title="#22223B / #F2E9E4">X</button>
         </div>
+
     </div>
 
     <!-- type="module" gjør at import-setningen i setIcon.js fungerer -->
