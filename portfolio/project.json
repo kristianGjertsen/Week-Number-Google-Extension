@@ -1,0 +1,45 @@
+{
+  "id": "Week Number - Dynamic Icon",
+  "year": 2026,
+  "sortDate": "2026-01-02",
+  "languages": [
+    "HTML",
+    "CSS",
+    "JavaScript",
+    "Chrome Extension"
+  ],
+  "img": "image.png",
+  "imgAlt": "Image of Week Number Chrome Extension",
+  "content": {
+    "no": {
+      "title": "Week Number - Dynamic Icon Extension for Chrome",
+      "shortText": "Chrome-utvidelse som viser uketallet.",
+      "longText": "Enkel Google-utvidelse som viser uketallet i ikonet for Chrome-nettleseren. Utvidelsen oppdaterer seg selv hver uke for å vise riktig uketall. Laget med HTML, CSS og JavaScript. Inneholder en liten meny for fargevalg for ikonet."
+    },
+    "en": {
+      "title": "Week Number - Dynamic Icon Extension for Chrome",
+      "shortText": "Chrome extension that shows the current week number.",
+      "longText": "Simple Chrome extension that shows the current week number directly in the browser icon. Updates itself every week to stay accurate. Built with HTML, CSS and JavaScript, and includes a small menu to choose the icon color."
+    }
+  },
+  "buttons": [
+    {
+      "href": "https://chromewebstore.google.com/detail/week-number-dynamic-icon/cddommedjeknbciihpjdioobmlnahjlp",
+      "label": {
+        "no": "Se i Chrome Web Store",
+        "en": "View in Chrome Web Store"
+      },
+      "ariaLabel": {
+        "no": "Åpne Week Number - Dynamic Icon i Chrome Web Store",
+        "en": "Open Week Number - Dynamic Icon in the Chrome Web Store"
+      }
+    },
+    {
+      "href": "https://github.com/kristianGjertsen/Week-Number-Google-Extension",
+      "label": {
+        "no": "Se koden på GitHub",
+        "en": "View the code on GitHub"
+      }
+    }
+  ]
+}
